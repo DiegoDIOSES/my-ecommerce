@@ -130,7 +130,7 @@ export default function CartDrawer({
                     <div className="flex-1">
                       <div className="text-sm font-medium">{it.name}</div>
                       <div className="mt-1 text-sm text-black/70">
-                        {it.price.toFixed(2)}€
+                        {it.price.toFixed(2)}S/.
                       </div>
 
                       <div className="mt-3 flex items-center justify-between">
@@ -170,7 +170,7 @@ export default function CartDrawer({
               <div className="mt-6 rounded-2xl border border-black/10 p-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-black/60">Total</span>
-                  <span className="font-semibold">{total.toFixed(2)}€</span>
+                  <span className="font-semibold">{total.toFixed(2)} S/.</span>
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 gap-2">

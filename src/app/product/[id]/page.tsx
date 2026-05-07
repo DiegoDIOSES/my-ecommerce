@@ -13,7 +13,7 @@ function cn(...v: Array<string | false | null | undefined>) {
 }
 
 function formatEUR(n: number) {
-  return n.toFixed(2).replace(".", ",") + "€";
+  return n.toFixed(2).replace(".", ",") + " S/.";
 }
 
 function normalizeImageUrl(url?: string) {

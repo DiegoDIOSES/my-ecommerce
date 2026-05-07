@@ -8,7 +8,7 @@ import StoreHeader from "../../components/layout/StoreHeader";
 import { useCart, CartItem } from "../store/cart";
 
 function formatEUR(n: number) {
-  return n.toFixed(2).replace(".", ",") + "€";
+  return n.toFixed(2).replace(".", ",") + " S/.";
 }
 
 function cn(...v: Array<string | false | null | undefined>) {

@@ -10,7 +10,7 @@ function cn(...v: Array<string | false | null | undefined>) {
 }
 
 function formatEUR(n: number) {
-  return n.toFixed(2).replace(".", ",") + "€";
+  return n.toFixed(2).replace(".", ",") + " S/.";
 }
 
 const TAGS: Array<{ key: ProductTag; label: string }> = [
@@ -328,7 +328,7 @@ function ProductEditor({
         </Field>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <Field label="Precio (€)">
+          <Field label="Precio (S/.)">
             <input
               value={price}
               onChange={(e) => setPrice(e.target.value)}
@@ -375,7 +375,6 @@ function ProductEditor({
                 />
               ) : null}
             </div>
-            <div className="text-xs text-black/50">Tip: guarda tus imágenes en <span className="font-medium">public/products/</span></div>
           </div>
         </Field>
 
@@ -495,7 +494,7 @@ function CreateProductModal({
           </Field>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <Field label="Precio (€)">
+            <Field label="Precio (S/.)">
               <input value={price} onChange={(e) => setPrice(e.target.value)} inputMode="decimal" className="h-11 w-full rounded-2xl border border-black/10 px-3 text-sm outline-none focus:border-black/20" />
             </Field>
             <Field label="Stock">

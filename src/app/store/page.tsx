@@ -459,7 +459,7 @@ export default function StorePage() {
 
                   <div className="mt-3 text-center">
                     <div className="text-sm font-medium">{p.name}</div>
-                    <div className="mt-1 text-sm text-black/70">{p.price.toFixed(2)}€</div>
+                    <div className="mt-1 text-sm text-black/70">{p.price.toFixed(2)} S/.</div>
 
                     <button
                       className={[

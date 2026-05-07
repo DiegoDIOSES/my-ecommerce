@@ -29,7 +29,7 @@ export default function ProductCard({ p }: { p: MockProduct }) {
         <div className="p-4">
           <div className="text-sm font-medium">{p.name}</div>
           <div className="mt-1 text-sm text-black/70">
-            {p.price.toFixed(2)}€
+            {p.price.toFixed(2)} S/.
           </div>
 
           <div className="mt-4">

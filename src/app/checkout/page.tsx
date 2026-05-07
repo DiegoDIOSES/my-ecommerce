@@ -11,7 +11,7 @@ import { createOrder } from "../../lib/orders";
 import type { Order } from "../../types/order";
 
 function formatEUR(n: number) {
-  return n.toFixed(2).replace(".", ",") + "€";
+  return n.toFixed(2).replace(".", ",") + " S/.";
 }
 
 function normalizeImageUrl(url?: string) {
