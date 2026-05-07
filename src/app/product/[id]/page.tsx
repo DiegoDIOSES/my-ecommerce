@@ -270,41 +270,6 @@ function ProductDetailContent({
               Realizar compra
             </button>
           </div>
-
-          <div className="mt-10 border-t border-black/10 pt-6">
-            <details open className="group border-b border-black/10 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold tracking-wide">
-                INFORMACIÓN DEL PRODUCTO
-                <span className="text-black/40 transition group-open:rotate-45">+</span>
-              </summary>
-              <div className="mt-3 text-sm leading-6 text-black/70">
-                <strong className="text-black">Detalles del producto.</strong> Este producto pertenece a{" "}
-                <span className="font-medium">{product.category || "General"}</span>, tiene código{" "}
-                <span className="font-medium">{product.id}</span> y precio de{" "}
-                <span className="font-medium">{formatEUR(product.price)}</span>.
-              </div>
-            </details>
-
-            <details className="group border-b border-black/10 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold tracking-wide">
-                POLÍTICA DE DEVOLUCIÓN Y REEMBOLSO
-                <span className="text-black/40 transition group-open:rotate-45">+</span>
-              </summary>
-              <div className="mt-3 text-sm leading-6 text-black/70">
-                Define aquí condiciones, plazos y procedimiento de devolución.
-              </div>
-            </details>
-
-            <details className="group border-b border-black/10 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold tracking-wide">
-                POLÍTICA DE ENVÍOS
-                <span className="text-black/40 transition group-open:rotate-45">+</span>
-              </summary>
-              <div className="mt-3 text-sm leading-6 text-black/70">
-                Define aquí tiempos de despacho, costos y cobertura.
-              </div>
-            </details>
-          </div>
         </section>
       </div>
     </main>
