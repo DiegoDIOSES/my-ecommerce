@@ -125,11 +125,10 @@ export default function StoreHeader({
             <Image
               src="/logo.png"
               alt="Biba"
-              width={140}
-              height={40}
+              width={70}
+              height={70}
               className="h-auto w-auto object-contain"
             />
-            <div className="text-sm text-black/60">Diseños llenas de color</div>
           </Link>
 
           {/* desktop nav */}
