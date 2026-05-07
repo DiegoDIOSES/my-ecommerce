@@ -204,12 +204,6 @@ export default function LoginPage() {
                 ? "Entrar"
                 : "Crear cuenta"}
             </button>
-
-            <div className="rounded-2xl border border-black/10 bg-black/[0.02] p-4 text-sm text-black/70">
-              {mode === "login"
-                ? "Usa una cuenta registrada en Firebase Authentication."
-                : "La cuenta se creará en Firebase Authentication y el perfil se guardará en la base de datos."}
-            </div>
           </form>
         </div>
       </main>
