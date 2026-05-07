@@ -157,12 +157,6 @@ function ProductDetailContent({
               ))}
             </div>
           ) : null}
-
-          <p className="mt-6 max-w-md text-sm leading-6 text-black/70">
-            Producto de la categoría{" "}
-            <span className="font-medium text-black">{product.category || "General"}</span>.
-            Aquí luego podremos mostrar una descripción real desde Firebase.
-          </p>
         </section>
 
         <section>
