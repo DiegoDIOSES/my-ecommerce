@@ -1,7 +1,8 @@
-export interface Category {
-  id?: string;
+export type Category = {
+  id: string;
   name: string;
-  slug: string;
-  active: boolean;
-  createdAt: number;
-}
+  slug?: string;
+  active?: boolean;
+  createdAt?: string | number;
+  updatedAt?: string | number;
+};

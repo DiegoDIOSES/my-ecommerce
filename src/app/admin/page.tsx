@@ -3,19 +3,19 @@
 import Link from "next/link";
 import { useEffect, useMemo } from "react";
 import { useProductsAdmin } from "../store/products.store";
-import { useOrders } from "../store/orders"; // <-- usa tu store real de orders (ajusta import si tu ruta es otra)
+import { useOrders } from "../store/orders";
 
 export default function AdminPage() {
   const products = useProductsAdmin((s) => s.products);
   const seedProducts = useProductsAdmin((s) => s.seedIfEmpty);
 
   const orders = useOrders((s) => s.orders);
-  const seedOrders = useOrders((s) => s.seedIfEmpty); // si tienes seed, si no, quítalo
+  const loadOrders = useOrders((s) => s.loadAll);
 
   useEffect(() => {
-    seedProducts();
-    if (seedOrders) seedOrders();
-  }, [seedProducts, seedOrders]);
+    void seedProducts();
+    void loadOrders();
+  }, [seedProducts, loadOrders]);
 
   const metrics = useMemo(() => {
     const totalProducts = products.length;
@@ -23,7 +23,9 @@ export default function AdminPage() {
     const outOfStock = products.filter((p) => p.active && p.stock <= 0).length;
 
     const totalOrders = orders.length;
-    const pendingOrders = orders.filter((o) => o.status === "pendiente").length;
+    const pendingOrders = orders.filter(
+      (o) => o.status === "PENDIENTE_PAGO" || o.status === "VALIDANDO"
+    ).length;
 
     return {
       totalProducts,
@@ -60,15 +62,27 @@ export default function AdminPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
-        <Card title="Pedidos" value={metrics.totalOrders} subtitle={`Pendientes: ${metrics.pendingOrders}`} />
-        <Card title="Productos" value={metrics.totalProducts} subtitle={`Activos: ${metrics.activeProducts}`} />
-        <Card title="Stock" value={metrics.outOfStock} subtitle="Sin stock (activos)" />
+        <Card
+          title="Pedidos"
+          value={metrics.totalOrders}
+          subtitle={`Pendientes: ${metrics.pendingOrders}`}
+        />
+        <Card
+          title="Productos"
+          value={metrics.totalProducts}
+          subtitle={`Activos: ${metrics.activeProducts}`}
+        />
+        <Card
+          title="Stock"
+          value={metrics.outOfStock}
+          subtitle="Sin stock (activos)"
+        />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
         <QuickCard
           title="Gestionar pedidos"
-          desc="Revisa pedidos, cambia estados y agrega notas."
+          desc="Revisa pedidos reales, valida pagos y cambia estados."
           href="/admin/orders"
           cta="Abrir pedidos"
         />

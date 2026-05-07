@@ -1,9 +1,14 @@
-export interface Product {
-  id?: string;
+export type ProductTag = "más vendido" | "oferta" | "nuevo";
+
+export type Product = {
+  id: string;
   name: string;
   price: number;
-  categoryId: string;
+  image?: string;
+  category?: string;
   stock: number;
   active: boolean;
-  createdAt: number;
-}
+  tags: ProductTag[];
+  createdAt?: string | number;
+  updatedAt?: string | number;
+};
