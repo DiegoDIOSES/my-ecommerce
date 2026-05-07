@@ -121,7 +121,7 @@ export default function StoreHeader({
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <Link href="/" className="min-w-0">
             <div className="text-2xl font-semibold tracking-tight">Biba</div>
-            <div className="text-sm text-black/60">Bolsas llenas de color</div>
+            <div className="text-sm text-black/60">Diseños llenas de color</div>
           </Link>
 
           {/* desktop nav */}
