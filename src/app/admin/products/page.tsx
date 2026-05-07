@@ -21,23 +21,24 @@ const TAGS: Array<{ key: ProductTag; label: string }> = [
 
 function normalizeImageUrl(url?: string) {
   if (!url) return "";
-
   const value = url.trim();
-
   if (!value) return "";
-
+  // GOOGLE DRIVE /file/d/
+  const fileMatch = value.match(/\/file\/d\/([^/]+)/);
+  if (fileMatch?.[1]) {
+    return `https://lh3.googleusercontent.com/d/${fileMatch[1]}`;
+  }
+  // GOOGLE DRIVE ?id=
   if (value.includes("drive.google.com")) {
-    const fileMatch = value.match(/\/file\/d\/([^/]+)/);
-    if (fileMatch?.[1]) {
-      return `https://drive.google.com/uc?export=view&id=${fileMatch[1]}`;
-    }
-
     const openMatch = value.match(/[?&]id=([^&]+)/);
     if (openMatch?.[1]) {
-      return `https://drive.google.com/uc?export=view&id=${openMatch[1]}`;
+      return `https://lh3.googleusercontent.com/d/${openMatch[1]}`;
     }
   }
-
+  // GOOGLE HOSTED
+  if (value.includes("lh3.googleusercontent.com")) {
+    return value;
+  }
   return value;
 }
 
@@ -148,7 +149,16 @@ export default function AdminProductsPage() {
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-black/10 bg-black/[0.02]">
-                        {p.image ? <Image src={p.image} alt={p.name} fill className="object-cover" sizes="48px" /> : null}
+                        {normalizeImageUrl(p.image) ? (
+                          <Image
+                            src={normalizeImageUrl(p.image)}
+                            alt={p.name}
+                            fill
+                            className="object-cover"
+                            sizes="48px"
+                            unoptimized
+                          />
+                        ) : null}
                       </div>
 
                       <div className="min-w-0 flex-1">
@@ -363,14 +373,14 @@ function ProductEditor({
             className="h-11 w-full rounded-2xl border border-black/10 px-3 text-sm outline-none focus:border-black/20"
           />
           <div className="mt-2 flex items-center gap-3">
-            <div className="relative h-14 w-14 overflow-hidden rounded-2xl border border-black/10 bg-black/[0.02]">
+            <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-black/10 bg-black/[0.02]">
               {normalizeImageUrl(image) ? (
                 <Image
                   src={normalizeImageUrl(image)}
                   alt="preview"
                   fill
                   className="object-cover"
-                  sizes="56px"
+                  sizes="80px"
                   unoptimized
                 />
               ) : null}
@@ -509,7 +519,7 @@ function CreateProductModal({
           <Field label="Imagen (URL de Google Drive o imagen pública)">
             <input value={image} onChange={(e) => setImage(e.target.value)} placeholder="https://drive.google.com/file/d/FILE_ID/view?usp=sharing" className="h-11 w-full rounded-2xl border border-black/10 px-3 text-sm outline-none focus:border-black/20" />
             <div className="mt-2 flex items-center gap-3">
-              <div className="relative h-14 w-14 overflow-hidden rounded-2xl border border-black/10 bg-black/[0.02]">
+              <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-black/10 bg-black/[0.02]">
                 {normalizeImageUrl(image) ? (
                   <Image
                     src={normalizeImageUrl(image)}
