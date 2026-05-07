@@ -21,6 +21,7 @@ function normalizeImageUrl(url?: string) {
   if (!value) return "";
 
   const fileMatch = value.match(/\/file\/d\/([^/]+)/);
+
   if (fileMatch?.[1]) {
     return `https://lh3.googleusercontent.com/d/${fileMatch[1]}`;
   }
@@ -31,6 +32,7 @@ function normalizeImageUrl(url?: string) {
 
   if (value.includes("drive.google.com")) {
     const openMatch = value.match(/[?&]id=([^&]+)/);
+
     if (openMatch?.[1]) {
       return `https://lh3.googleusercontent.com/d/${openMatch[1]}`;
     }
@@ -62,6 +64,7 @@ export default function CheckoutPage() {
   const clear = useCart((s) => s.clear);
 
   const subtotal = useMemo(() => subtotalFn(), [subtotalFn, items]);
+
   const shipping = 0;
   const total = subtotal + shipping;
 
@@ -124,16 +127,23 @@ export default function CheckoutPage() {
       setSubmitting(true);
 
       const orderNumber = generateOrderNumber();
-      const userId = authUser?.phone?.trim() || form.phone.trim();
+
+      const userId =
+        authUser?.phone?.trim() ||
+        authUser?.email?.trim() ||
+        form.phone.trim();
 
       const order: Order = {
         id: orderNumber,
         orderNumber,
+
         userId,
+
         customerName: form.fullName.trim(),
         customerPhone: form.phone.trim(),
         customerAddress: form.address.trim(),
         customerReference: form.reference.trim() || undefined,
+
         items: items.map((it) => ({
           productId: it.id,
           name: it.name,
@@ -141,43 +151,56 @@ export default function CheckoutPage() {
           price: it.price,
           image: it.image ?? "",
         })),
+
         total,
+
         status: "PENDIENTE_PAGO",
+
         createdAt: Date.now(),
       };
 
+      // GUARDAR PEDIDO
       await createOrder(order);
 
+      // MENSAJE WHATSAPP
       const waMessage = [
-        "Hola, quiero finalizar este pedido.",
+        "Hola, quiero confirmar este pedido y coordinar el pago.",
         "",
         `Pedido: ${order.orderNumber}`,
         `Cliente: ${order.customerName}`,
         `Celular: ${order.customerPhone}`,
         `Dirección: ${order.customerAddress}`,
-        order.customerReference ? `Referencia: ${order.customerReference}` : "",
-        `Total: ${formatEUR(order.total)}`,
+        order.customerReference
+          ? `Referencia: ${order.customerReference}`
+          : "",
         "",
         "Detalle del pedido:",
         ...order.items.map(
           (item) =>
-            `- ${item.name} | Cantidad: ${item.qty} | ${formatEUR(item.price * item.qty)}`
+            `- ${item.name} | Cantidad: ${item.qty} | ${formatEUR(
+              item.price * item.qty
+            )}`
         ),
         "",
-        "Quedo atento(a) a los medios de pago.",
+        `Total: ${formatEUR(order.total)}`,
+        "",
+        "Por favor, indíquenme los medios de pago disponibles.",
       ]
         .filter(Boolean)
         .join("\n");
 
-      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
+      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+        waMessage
+      )}`;
 
-      window.open(waUrl, "_blank", "noopener,noreferrer");
-
+      // LIMPIAR CARRITO
       clear();
-      alert("Pedido registrado. Ahora continúa la coordinación por WhatsApp.");
-      router.push("/profile");
+
+      // ABRIR WHATSAPP
+      window.location.href = waUrl;
     } catch (error) {
       console.error("Error al crear pedido:", error);
+
       alert("No se pudo registrar el pedido. Intenta nuevamente.");
     } finally {
       setSubmitting(false);
@@ -191,9 +214,13 @@ export default function CheckoutPage() {
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-10">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Checkout</h1>
+            <h1 className="text-3xl font-semibold tracking-tight">
+              Checkout
+            </h1>
+
             <p className="mt-1 text-sm text-black/60">
-              Completa tus datos y continúa la coordinación del pago por WhatsApp.
+              Completa tus datos y continúa la coordinación del pago por
+              WhatsApp.
             </p>
           </div>
 
@@ -216,12 +243,18 @@ export default function CheckoutPage() {
 
         <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
           <section className="space-y-6">
+            {/* DATOS CLIENTE */}
             <div className="rounded-2xl border border-black/10 p-5">
-              <div className="text-sm font-semibold">Datos del cliente</div>
+              <div className="text-sm font-semibold">
+                Datos del cliente
+              </div>
 
               <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <label className="text-xs text-black/60">Nombre completo</label>
+                  <label className="text-xs text-black/60">
+                    Nombre completo
+                  </label>
+
                   <input
                     value={form.fullName}
                     onChange={handleChange("fullName")}
@@ -231,7 +264,10 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-black/60">Celular</label>
+                  <label className="text-xs text-black/60">
+                    Celular
+                  </label>
+
                   <input
                     value={form.phone}
                     onChange={handleChange("phone")}
@@ -241,7 +277,10 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="space-y-1 sm:col-span-2">
-                  <label className="text-xs text-black/60">Dirección</label>
+                  <label className="text-xs text-black/60">
+                    Dirección
+                  </label>
+
                   <input
                     value={form.address}
                     onChange={handleChange("address")}
@@ -251,7 +290,10 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="space-y-1 sm:col-span-2">
-                  <label className="text-xs text-black/60">Referencia</label>
+                  <label className="text-xs text-black/60">
+                    Referencia
+                  </label>
+
                   <textarea
                     value={form.reference}
                     onChange={handleChange("reference")}
@@ -263,31 +305,43 @@ export default function CheckoutPage() {
               </div>
             </div>
 
+            {/* COORDINACION */}
             <div className="rounded-2xl border border-black/10 p-5">
-              <div className="text-sm font-semibold">Coordinación de pago</div>
+              <div className="text-sm font-semibold">
+                Coordinación de pago
+              </div>
+
               <div className="mt-3 rounded-2xl border border-black/10 bg-black/[0.02] p-4 text-sm text-black/70">
-                Cuando confirmes el pedido, se abrirá WhatsApp con el equipo de atención.
-                Allí te compartirán los medios de pago para completar la compra.
+                Cuando confirmes el pedido, se abrirá WhatsApp con el
+                equipo de atención. Allí te compartirán los medios de
+                pago para completar la compra.
               </div>
 
               <div className="mt-4 rounded-2xl border border-dashed border-black/15 p-4 text-sm text-black/70">
-                <span className="font-medium text-black">Importante:</span> tu pedido se registrará con
-                estado <span className="font-medium">PENDIENTE_PAGO</span> hasta que el equipo te indique
-                cómo continuar.
+                <span className="font-medium text-black">
+                  Importante:
+                </span>{" "}
+                tu pedido se registrará con estado{" "}
+                <span className="font-medium">
+                  PENDIENTE_PAGO
+                </span>
+                .
               </div>
 
               <button
                 type="button"
                 disabled={!canSubmit || submitting}
+                onClick={handleSubmit}
                 className={[
                   "mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold text-white transition",
                   canSubmit && !submitting
                     ? "bg-black hover:bg-black/90"
                     : "cursor-not-allowed bg-black/20",
                 ].join(" ")}
-                onClick={handleSubmit}
               >
-                {submitting ? "Registrando pedido..." : "Confirmar pedido por WhatsApp"}
+                {submitting
+                  ? "Registrando pedido..."
+                  : "Confirmar pedido por WhatsApp"}
               </button>
 
               <button
@@ -301,83 +355,72 @@ export default function CheckoutPage() {
             </div>
           </section>
 
+          {/* RESUMEN */}
           <aside className="h-fit rounded-2xl border border-black/10 p-5">
             <div className="text-sm font-semibold">Resumen</div>
 
             <div className="mt-4 space-y-3">
-              {isCartEmpty ? (
-                <div className="rounded-2xl border border-black/10 p-4 text-sm text-black/60">
-                  Tu carrito está vacío.
-                </div>
-              ) : (
-                items.map((it) => {
-                  const image = normalizeImageUrl(it.image);
+              {items.map((it) => {
+                const image = normalizeImageUrl(it.image);
 
-                  return (
-                    <div key={it.id} className="flex items-center gap-3">
-                      <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-black/10 bg-black/[0.02]">
-                        {image ? (
-                          <Image
-                            src={image}
-                            alt={it.name}
-                            fill
-                            className="object-cover"
-                            sizes="56px"
-                            unoptimized
-                          />
-                        ) : null}
+                return (
+                  <div
+                    key={it.id}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-black/10 bg-black/[0.02]">
+                      {image ? (
+                        <Image
+                          src={image}
+                          alt={it.name}
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                          unoptimized
+                        />
+                      ) : null}
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-medium">
+                        {it.name}
                       </div>
 
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate text-sm font-medium">{it.name}</div>
-                        <div className="text-xs text-black/60">
-                          {it.qty} × {formatEUR(it.price)}
-                        </div>
-                      </div>
-
-                      <div className="text-sm font-semibold">
-                        {formatEUR(it.price * it.qty)}
+                      <div className="text-xs text-black/60">
+                        {it.qty} × {formatEUR(it.price)}
                       </div>
                     </div>
-                  );
-                })
-              )}
+
+                    <div className="text-sm font-semibold">
+                      {formatEUR(it.price * it.qty)}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="mt-5 space-y-2 border-t border-black/10 pt-4 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-black/60">Subtotal</span>
-                <span className="font-medium">{formatEUR(subtotal)}</span>
+                <span className="font-medium">
+                  {formatEUR(subtotal)}
+                </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-black/60">Envío</span>
-                <span className="font-medium">
-                  {shipping === 0 ? "Gratis" : formatEUR(shipping)}
-                </span>
+
+                <span className="font-medium">Gratis</span>
               </div>
 
               <div className="flex items-center justify-between pt-2">
                 <span className="font-semibold">Total</span>
-                <span className="text-base font-semibold">{formatEUR(total)}</span>
+
+                <span className="text-base font-semibold">
+                  {formatEUR(total)}
+                </span>
               </div>
             </div>
-
-            <p className="mt-4 text-xs text-black/50">
-              Tu pedido se registrará por usuario y quedará en estado PENDIENTE_PAGO.
-            </p>
-
-            {isCartEmpty ? (
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={() => router.push("/store")}
-                  className="w-full rounded-2xl border border-black/15 px-4 py-3 text-sm font-medium hover:bg-black/[0.03]"
-                >
-                  Ir a la tienda
-                </button>
-              </div>
-            ) : null}
           </aside>
         </div>
       </main>
