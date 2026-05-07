@@ -46,7 +46,7 @@ type FormState = {
   reference: string;
 };
 
-const WHATSAPP_NUMBER = "5193738128";
+const WHATSAPP_NUMBER = "51937328128";
 
 function generateOrderNumber() {
   return `ORD-${Date.now()}`;
