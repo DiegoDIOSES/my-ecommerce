@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import CartDrawer from "../../components/cart/CartDrawer";
 import { useCart } from "../../app/store/cart";
 import { useAuth } from "../../app/store/auth";
+
 
 interface User {
   role: "admin" | "user";
@@ -120,7 +122,13 @@ export default function StoreHeader({
       <header className="sticky top-0 z-50 border-b border-black/10 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <Link href="/" className="min-w-0">
-            <div className="text-2xl font-semibold tracking-tight">Biba</div>
+            <Image
+              src="/logo.png"
+              alt="Biba"
+              width={140}
+              height={40}
+              className="h-auto w-auto object-contain"
+            />
             <div className="text-sm text-black/60">Diseños llenas de color</div>
           </Link>
 
