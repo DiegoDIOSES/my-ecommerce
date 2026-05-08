@@ -408,16 +408,18 @@ export default function StorePage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between rounded-2xl border border-black/10 bg-white px-3 py-2">
-                <div className="text-xs text-black/60">Ordenar</div>
+              <div className="rounded-2xl border border-black/10 bg-white px-3 py-2">
+                <div className="text-xs text-black/60">Categoría</div>
                 <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as Sort)}
-                  className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none"
+                  value={cat}
+                  onChange={(e) => setCat(e.target.value)}
+                  className="mt-1 w-full bg-transparent text-sm outline-none"
                 >
-                  <option value="relevance">Relevancia</option>
-                  <option value="price_asc">Precio: menor a mayor</option>
-                  <option value="price_desc">Precio: mayor a menor</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
